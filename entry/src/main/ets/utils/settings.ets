@@ -18,7 +18,7 @@ export class UserSettingClass{
 
   async setUserAdvertisement(advertisement:AdvertisementClass){
     const advertisementStore = await this.getStore()
-    await advertisementStore.put(USER_SETTING_AD,JSON.stringify(defaultAdvertisement))
+    await advertisementStore.put(USER_SETTING_AD,JSON.stringify(advertisement))
     await advertisementStore.flush()
   }
 
