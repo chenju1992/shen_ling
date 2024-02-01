@@ -6,11 +6,11 @@
     },
     {
       "name": "EntryAbility_desc",
-      "value": "description"
+      "value": "神领物流司机端 用来 提货 交货 回车登记"
     },
     {
       "name": "EntryAbility_label",
-      "value": "label"
+      "value": "神领物流"
     }
   ]
 }
