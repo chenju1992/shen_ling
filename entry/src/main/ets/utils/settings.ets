@@ -1,6 +1,6 @@
 import preferences from '@ohos.data.preferences'
 import { AdvertisementClass } from '../models/AdvertisementClass'
-import {USER_SETTING,USER_SETTING_AD} from '../constants'
+import {USER_SETTING,USER_SETTING_AD,TOKEN_KEY} from '../constants'
 
 const defaultAdvertisement = new AdvertisementClass(true,5,$r('app.media.start'))
 
@@ -25,6 +25,17 @@ export class UserSettingClass{
   async getUserAdvertisement():Promise<AdvertisementClass>{
     const advertisementStore = await this.getStore()
     return JSON.parse(await advertisementStore.get(USER_SETTING_AD,JSON.stringify(defaultAdvertisement)) as string) as AdvertisementClass
+  }
+
+  async setUserToken(token:string){
+    const advertisementStore = await this.getStore()
+    await advertisementStore.put(TOKEN_KEY,token)
+    advertisementStore.flush()
+  }
+
+  async getUserToken(){
+    const advertisementStore = await this.getStore()
+    return await advertisementStore.get(TOKEN_KEY,"") as string
   }
 
 }

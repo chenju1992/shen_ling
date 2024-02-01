@@ -22,7 +22,12 @@ export default class EntryAbility extends UIAbility {
     if(advertisementSetting.isShowId){
       windowStage.loadContent('pages/Start/Start')
     }else{
-      windowStage.loadContent('/pages/Index')
+      const token = await userSetting.getUserToken()
+      if(token){
+        windowStage.loadContent('pages/Index')
+      }else{
+        windowStage.loadContent('pages/Login/Login')
+      }
     }
 
 

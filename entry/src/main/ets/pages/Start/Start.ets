@@ -1,6 +1,9 @@
 import {UserSettingClass} from '../../utils/settings'
 import {AdvertisementClass} from '../../models/AdvertisementClass'
 import router from '@ohos.router'
+import { TOKEN_KEY } from '../../constants'
+
+PersistentStorage.PersistProp(TOKEN_KEY, "")
 
 @Entry
 @Component
@@ -16,7 +19,7 @@ struct Start {
     setInterval(()=>{
       if(this.advertisementObject.adTimeInSecond == 0){
         clearInterval(this.timer)
-        router.replaceUrl({url:'pages/Index'})
+        this.toNext()
         return
       }
       this.advertisementObject.adTimeInSecond--
@@ -26,7 +29,6 @@ struct Start {
     Stack({ alignContent: Alignment.TopEnd }) {
       Image(this.advertisementObject.advertisementImage).objectFit(ImageFit.Cover)
       Text(`${this.advertisementObject.adTimeInSecond}秒后跳过`)
-        .onClick(()=>{router.replaceUrl({url:'pages/Index'})})
         .padding({ left: 10, right: 10 })
         .margin({ right: 20, top: 20 })
         .height(30)
@@ -34,8 +36,17 @@ struct Start {
         .borderRadius(15)
         .backgroundColor($r('app.color.background_page'))
         .textAlign(TextAlign.Center)
+        .onClick(()=>{this.toNext()})
 
     }.height('100%').width('100%')
+  }
+
+  toNext(){
+    if(AppStorage.Get<string>(TOKEN_KEY)){
+      router.replaceUrl({url:'pages/Index'})
+    }else{
+      router.replaceUrl({url:'pages/Login/Login'})
+    }
   }
 
   aboutToDisappear(){
