@@ -1,3 +1,4 @@
+import { HmCard, HmCardItem } from '../../../components'
 @Preview
 @Component
 struct My {
@@ -77,40 +78,11 @@ struct My {
       .justifyContent(FlexAlign.SpaceBetween)
 
       // 信息列表
-      Column() {
-        Row() {
-          Text("车辆信息").fontSize(16).fontWeight(400).fontColor($r('app.color.text_primary'))
-          Image($r("app.media.ic_btn_more")).width(24).height(24)
-        }
-        .justifyContent(FlexAlign.SpaceBetween)
-        .alignItems(VerticalAlign.Center)
-        .border({ width: { bottom: 1 }, color: $r('app.color.background_page') })
-        .width('100%')
-        .height(60)
-
-        Row() {
-          Text("任务数据").fontSize(16).fontWeight(400).fontColor($r('app.color.text_primary'))
-          Image($r("app.media.ic_btn_more")).width(24).height(24)
-        }
-        .justifyContent(FlexAlign.SpaceBetween)
-        .alignItems(VerticalAlign.Center)
-        .border({ width: { bottom: 1 }, color: $r('app.color.background_page') })
-        .width('100%')
-        .height(60)
-
-        Row() {
-          Text("系统设置").fontSize(16).fontWeight(400).fontColor($r('app.color.text_primary'))
-          Image($r("app.media.ic_btn_more")).width(24).height(24)
-        }
-        .justifyContent(FlexAlign.SpaceBetween)
-        .alignItems(VerticalAlign.Center)
-        .width('100%')
-        .height(60)
+      HmCard() {
+        HmCardItem({ leftTitle: '车辆信息', rightText: '' })
+        HmCardItem({ leftTitle: '任务设置', rightText: '' })
+        HmCardItem({ leftTitle: '系统设置', rightText: '', showBottomBorder: false })
       }
-      .padding({ left: 17.5, right: 17.5 })
-      .backgroundColor($r('app.color.white'))
-      .margin({ left: 14.5, right: 14.5, bottom: 15 })
-      .borderRadius(8)
 
     }.width('100%').height('100%').backgroundColor($r('app.color.background_page')).borderRadius(8)
   }
