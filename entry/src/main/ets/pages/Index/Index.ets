@@ -19,6 +19,7 @@ struct Index {
     name: 'my',
     icon: $r("app.media.ic_tab_btn_mine_nor")
   }]
+  @State currentName: string = 'task'
 
   build() {
     Tabs({ barPosition: BarPosition.End }){
@@ -35,7 +36,9 @@ struct Index {
           }
         }.tabBar(this.getTabBar(item))
       })
-    }
+    }.onChange(index => {
+      this.currentName = this.tabsData[index].name
+    }).animationDuration(300)
   }
 
   @Builder
@@ -45,6 +48,8 @@ struct Index {
       Text(item.title)
         .fontSize(12)
         .fontWeight(400)
+        .fontColor(item.name === this.currentName ?
+        $r('app.color.primary') : $r('app.color.text_secondary'))
         .margin({ top: 5 })
     }.alignItems(HorizontalAlign.Center)
   }
