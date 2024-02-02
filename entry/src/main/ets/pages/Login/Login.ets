@@ -1,6 +1,9 @@
 import { TOKEN_KEY } from '../../constants'
 import { UserSettingClass } from '../../utils/settings'
 import { LoginFormModel } from '../../models'
+import { login } from '../../api'
+import router from '@ohos.router'
+
 
 
 PersistentStorage.PersistProp(TOKEN_KEY, "")
@@ -56,6 +59,11 @@ struct Login {
         .onChange((value) => {
           this.accountForm.password = value
         }) // 显示密码按钮
+        .onSubmit(() => {
+          if(this.getFormValidate()) {
+            this.login()
+          }
+        })
 
       // 登录按钮
       Button({ type: ButtonType.Capsule, stateEffect: this.getFormValidate()  }) {
@@ -75,6 +83,9 @@ struct Login {
       .width('100%')
       .height(50)
       .margin({ top: 50 }).enabled(this.getFormValidate())
+      .onClick(() => {
+        this.login()
+      })
     }
     .padding({ left: 32, right: 32 })
     .margin({ top: 40 })
@@ -87,4 +98,25 @@ struct Login {
     }
     return false
   }
+
+
+  // 调用登录接口
+  async login() {
+    try {
+      this.showLoading = true
+      const token = await login(this.accountForm)
+      AppStorage.Set(TOKEN_KEY, token) // 写入本地缓存
+      new UserSettingClass(getContext(this)).setUserToken(token) // 存入首选项
+      this.showLoading = false
+      router.replaceUrl({
+        url: 'pages/Index'
+      })
+    }catch (error) {
+
+    } finally {
+      this.showLoading = false
+    }
+
+  }
+
 }

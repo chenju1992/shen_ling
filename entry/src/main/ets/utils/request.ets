@@ -4,6 +4,7 @@ import { ResponseData } from '../models'
 import router from '@ohos.router';
 import promptAction from '@ohos.promptAction';
 import { UserSettingClass } from '.';
+import { TOKEN_KEY } from '../constants'
 
 const httpRequest = http.createHttp()
 
