@@ -1,5 +1,6 @@
 import { TOKEN_KEY } from '../../constants'
 import { TabClass } from '../../models'
+import My from './My/My'
 
 PersistentStorage.PersistProp(TOKEN_KEY, "")
 
@@ -32,7 +33,7 @@ struct Index {
             Text("消息组件")
           }
           else {
-            Text("我的组件")
+            My()
           }
         }.tabBar(this.getTabBar(item))
       })
