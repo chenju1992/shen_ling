@@ -1,17 +1,24 @@
 import { HmCard, HmCardItem } from '../../../components'
+import { UserInfo, UserInfoModel } from '../../../models'
+import { getUserInfo } from '../../../api'
+
 @Preview
 @Component
 struct My {
+
+  @State
+  userInfo: UserInfoModel = new UserInfoModel({} as UserInfo)
+
   build() {
     Column(){
       // 基本信息
       Column() {
-        Image($r("app.media.ic_avatar_driver"))
+        Image(this.userInfo.avatar || $r("app.media.ic_avatar_driver"))
           .width(67)
           .height(67)
           .borderRadius(34.5)
           .backgroundColor($r('app.color.white'))
-        Text("司机")
+        Text(this.userInfo.name)
           .fontSize(18)
           .fontWeight(600)
           .lineHeight(25)
@@ -20,8 +27,8 @@ struct My {
             bottom: 9
           })
           .fontColor($r('app.color.white'))
-        Text(`司机编号: 66666666`).fontSize(14).fontWeight(400).lineHeight(20).fontColor($r('app.color.white'))
-        Text(`手机号: 66666666`)
+        Text(`司机编号: ${this.userInfo.number}`).fontSize(14).fontWeight(400).lineHeight(20).fontColor($r('app.color.white'))
+        Text(`手机号: ${this.userInfo.phone}`)
           .fontSize(14)
           .fontWeight(400)
           .lineHeight(20)
@@ -85,6 +92,14 @@ struct My {
       }
 
     }.width('100%').height('100%').backgroundColor($r('app.color.background_page')).borderRadius(8)
+  }
+
+  aboutToAppear() {
+    this.getUserInfo()
+  }
+
+  async getUserInfo() {
+    this.userInfo = await getUserInfo()
   }
 }
 
