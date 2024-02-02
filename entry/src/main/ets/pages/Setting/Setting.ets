@@ -1,5 +1,5 @@
 import router from '@ohos.router'
-import { HmCard, HmCardItem } from '../../components'
+import { HmCard, HmCardItem, HmNavBar } from '../../components'
 
 @Entry
 @Component
@@ -7,6 +7,7 @@ struct Setting {
 
   build() {
     Column() {
+      HmNavBar({ title: '系统设置' })
       HmCard() {
         HmCardItem({ leftTitle: '换绑手机', rightText: '' })
         HmCardItem({ leftTitle: '修改密码', rightText: '' })
