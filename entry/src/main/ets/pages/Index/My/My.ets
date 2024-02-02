@@ -1,6 +1,6 @@
 import { HmCard, HmCardItem } from '../../../components'
-import { UserInfo, UserInfoModel, UserTaskInfoModel, UserTaskInfoParamsModel } from '../../../models'
-import { getUserInfo } from '../../../api'
+import { UserInfo, UserInfoModel, UserTaskInfo, UserTaskInfoModel, UserTaskInfoParamsModel } from '../../../models'
+import { getUserInfo, getUserTaskInfo } from '../../../api'
 
 @Preview
 @Component
