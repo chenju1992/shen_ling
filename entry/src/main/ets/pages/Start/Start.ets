@@ -43,7 +43,7 @@ struct Start {
 
   toNext(){
     if(AppStorage.Get<string>(TOKEN_KEY)){
-      router.replaceUrl({url:'pages/Index'})
+      router.replaceUrl({url:'pages/Index/Index'})
     }else{
       router.replaceUrl({url:'pages/Login/Login'})
     }

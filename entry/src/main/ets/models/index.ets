@@ -1,5 +1,6 @@
 export * from './AdvertisementClass'
 export * from './user'
+export * from './tab'
 
 export class ResponseData<T> {
   code: number = 0

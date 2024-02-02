@@ -109,7 +109,7 @@ struct Login {
       new UserSettingClass(getContext(this)).setUserToken(token) // 存入首选项
       this.showLoading = false
       router.replaceUrl({
-        url: 'pages/Index'
+        url: 'pages/Index/Index'
       })
     }catch (error) {
 
