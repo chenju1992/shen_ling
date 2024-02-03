@@ -1,4 +1,5 @@
 import { TabClass } from '../../../models'
+import TaskList from './TaskList'
 @Preview
 @Component
 struct TaskTabs {
@@ -40,7 +41,9 @@ struct TaskTabs {
     Tabs({ barPosition: BarPosition.Start }) {
       ForEach(this.tabsData, (item: TabClass) => {
         TabContent(){
-          Text(item.title)
+          if(item.name === 'waiting'){
+            TaskList()
+          }
         }.tabBar(this.getTabBar(item))
       })
     }
