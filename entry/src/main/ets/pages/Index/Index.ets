@@ -1,12 +1,15 @@
 import { TOKEN_KEY } from '../../constants'
 import { TabClass } from '../../models'
 import My from './My/My'
+import TaskTabs from  './Task/TaskTabs'
 
 PersistentStorage.PersistProp(TOKEN_KEY, "")
 
 @Entry
 @Component
 struct Index {
+
+  @State currentName: string = 'task'
   @State tabsData: TabClass[] = [{
     title: '任务',
     name: 'task',
@@ -20,14 +23,13 @@ struct Index {
     name: 'my',
     icon: $r("app.media.ic_tab_btn_mine_nor")
   }]
-  @State currentName: string = 'task'
 
   build() {
     Tabs({ barPosition: BarPosition.End }){
       ForEach(this.tabsData, (item: TabClass) => {
         TabContent(){
           if(item.name === 'task') {
-            Text("任务组件")
+            TaskTabs()
           }
           else if(item.name === 'message') {
             Text("消息组件")
