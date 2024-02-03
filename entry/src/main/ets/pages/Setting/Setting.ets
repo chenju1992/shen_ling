@@ -1,9 +1,29 @@
 import router from '@ohos.router'
-import { HmCard, HmCardItem, HmNavBar } from '../../components'
+import { HmCard, HmCardItem, HmConfirm, HmNavBar } from '../../components'
+import { TOKEN_KEY } from '../../constants'
+import { UserSettingClass } from '../../utils'
 
 @Entry
 @Component
 struct Setting {
+
+  confirm: CustomDialogController = new CustomDialogController({
+    builder: HmConfirm({
+      message: '确定要退出登录吗?',
+      buttonList: [{
+        text: '取消'
+      },{
+        text: '确定',
+        fontColor: $r('app.color.primary'),
+        action: () => {
+          this.logout()
+        }
+      }]
+    }),
+    customStyle: true,
+    alignment: DialogAlignment.Center,
+    autoCancel: false
+  })
 
   build() {
     Column() {
@@ -26,6 +46,9 @@ struct Setting {
           .width('100%')
           .borderRadius(8)
           .height(60)
+          .onClick(() => {
+            this.confirm.open()
+          })
       }.width('100%').margin({
         top: 20
       }).padding({
@@ -35,5 +58,14 @@ struct Setting {
       .justifyContent(FlexAlign.Center)
     }.width('100%')
     .height('100%').backgroundColor($r('app.color.background_page'))
+  }
+
+  logout () {
+    // 删除token
+    AppStorage.Set<string>(TOKEN_KEY, "")
+    new UserSettingClass(getContext(this)).setUserToken("")
+    router.replaceUrl({
+      url: 'pages/Login/Login'
+    })
   }
 }
