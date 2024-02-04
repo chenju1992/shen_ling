@@ -2,7 +2,7 @@ import { getTaskList } from '../../../api/task'
 import { TaskInfoItem, TaskInfoItemModel, TaskListParams, TaskListParamsModel, TaskTypeEnum } from '../../../models'
 import TaskItemCard from './TaskItemCard'
 
-@Preview
+
 @Component
 struct TaskList {
   @State
@@ -22,14 +22,16 @@ struct TaskList {
     const result = await getTaskList(this.queryParams)
     this.taskListData = result.items
   }
+
   build() {
     List () {
       ForEach(this.taskListData, (item: TaskInfoItemModel) => {
         ListItem(){
-          TaskItemCard()
+          TaskItemCard({ taskItemData: item })
         }
       })
     }
   }
+
 }
 export default  TaskList
