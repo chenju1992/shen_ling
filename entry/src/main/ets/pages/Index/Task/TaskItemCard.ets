@@ -56,10 +56,12 @@ struct TaskItemCard {
         }.alignItems(HorizontalAlign.Start)
 
         Button("提货", { type: ButtonType.Capsule })
-          .backgroundColor($r('app.color.primary'))
+          .backgroundColor(this.getBtnEnable() ? $r('app.color.primary') : $r('app.color.primary_disabled'))
           .fontColor($r("app.color.white"))
           .fontSize(14)
           .height(32)
+          .enabled(this.getBtnEnable())
+
 
       }.justifyContent(FlexAlign.SpaceBetween).width('100%')
     }
@@ -69,6 +71,14 @@ struct TaskItemCard {
     .backgroundColor($r('app.color.white'))
 
   }
+
+  getBtnEnable() {
+    if (this.taskItemData.enablePickUp) {
+      return true
+    }
+    return false
+  }
+
 }
 
 export default TaskItemCard
