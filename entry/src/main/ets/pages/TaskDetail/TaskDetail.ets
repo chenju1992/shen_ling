@@ -106,6 +106,46 @@ struct TaskDetail {
   }
 
 
+  // 司机信息
+  @Builder
+  getDriverContent() {
+    Row() {
+      Text(`车牌号`).fontSize(14).fontColor($r('app.color.text_secondary'))
+        .lineHeight(20)
+      Text(this.taskDetailData.licensePlate).fontSize(14).fontColor($r('app.color.text_secondary'))
+    }.justifyContent(FlexAlign.SpaceBetween).width('100%').margin({
+      top: 14
+    })
+
+    Row() {
+      Text(`司机姓名`).fontSize(14).fontColor($r('app.color.text_secondary'))
+        .lineHeight(20)
+      Text(this.taskDetailData.driverName).fontSize(14).fontColor($r('app.color.text_secondary'))
+    }.justifyContent(FlexAlign.SpaceBetween).width('100%').margin({
+      top: 14
+    })
+  }
+  // 运输路线
+  @Builder
+  getTransLineContent() {
+    Row() {
+      Column() {
+        Text(this.taskDetailData.startProvince).fontSize(16).fontColor($r('app.color.text_primary')).lineHeight(22).fontWeight(600)
+        Text(this.taskDetailData.startCity).fontSize(14).lineHeight(22)
+      }.width(50)
+
+      Image($r("app.media.ic_right_arrow")).width(36).height(16)
+      Column() {
+        Text(this.taskDetailData.endProvince).fontSize(16).fontColor($r('app.color.text_primary')).lineHeight(22).fontWeight(600)
+        Text(this.taskDetailData.endCity).fontSize(14).lineHeight(22)
+      }.width(50)
+    }.justifyContent(FlexAlign.SpaceBetween).alignItems(VerticalAlign.Center).width('100%').padding({
+      left: 60,
+      right: 60
+    })
+  }
+
+
   aboutToAppear() {
     const params = router.getParams() as CommonRouterParams
     if(params && params.id) {
@@ -122,13 +162,13 @@ struct TaskDetail {
       Scroll(this.scroller) {
         Column() {
           HmToggleCard({ title: '基本信息' }) {
-            Text(JSON.stringify(this.taskDetailData))
+            this.getBaseContent()
           }
-          HmToggleCard({ title: '基本信息' }) {
-            Text(JSON.stringify(this.taskDetailData))
+          HmToggleCard({ title: '车辆司机信息' }) {
+            this.getDriverContent()
           }
-          HmToggleCard({ title: '基本信息' }) {
-            Text(JSON.stringify(this.taskDetailData))
+          HmToggleCard({ title: '运输路线' }) {
+            this.getTransLineContent()
           }
         }.padding({
           bottom: 120
