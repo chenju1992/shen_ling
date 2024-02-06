@@ -1,4 +1,4 @@
-import { HmNavBar , HmToggleCard} from '../../components'
+import { HmNavBar , HmToggleCard, HmUpload} from '../../components'
 import router from '@ohos.router'
 import { CommonRouterParams, TaskDetailInfo, TaskDetailInfoModel } from '../../models'
 import { getTaskDetail } from '../../api'
@@ -146,11 +146,47 @@ struct TaskDetail {
   }
 
 
+
+
   aboutToAppear() {
     const params = router.getParams() as CommonRouterParams
     if(params && params.id) {
       this.getTaskDetail(params.id)
     }
+  }
+
+  @Builder
+  getPickUpContent() {
+    HmUpload({ title: '请拍照上传回单凭证' })
+    HmUpload({ title: '请拍照上传货品照片' })
+  }
+
+  // 底部按钮结构
+  @Builder
+  getBottomBtn() {
+    //已完成不显示任何按钮
+    Row() {
+      Button("延迟收货", { type: ButtonType.Capsule })
+        .backgroundColor($r('app.color.btn_gray'))
+        .fontColor($r('app.color.text_primary'))
+        .fontSize(16)
+        .height(50)
+        .width(125)
+      Button("提货", { type: ButtonType.Capsule })
+        .backgroundColor($r('app.color.primary_disabled'))
+        .fontColor($r('app.color.white'))
+        .height(50)
+        .flexGrow(1)
+        .margin({ left: 13 })
+    }
+    .width('100%')
+    .padding({ left: 15, right: 15 })
+    .height(70).
+    justifyContent(FlexAlign.SpaceBetween).
+    alignItems(VerticalAlign.Center)
+    .backgroundColor($r('app.color.white'))
+    .position({ y: '100%' })
+    .translate({ y: -70 })
   }
 
 
@@ -170,10 +206,14 @@ struct TaskDetail {
           HmToggleCard({ title: '运输路线' }) {
             this.getTransLineContent()
           }
+          HmToggleCard({ title: '提货信息' }) {
+            this.getPickUpContent()
+          }
         }.padding({
           bottom: 120
         })
       }
+      this.getBottomBtn()
     }.backgroundColor($r('app.color.background_page')).height('100%')
   }
 }
@@ -191,6 +231,8 @@ struct TaskDetail {
 @Extend(Text) function baseTextTwoStyle() {
   .margin({ left: 11.5 }).fontColor($r('app.color.text_secondary')).fontSize(14).lineHeight(20)
 }
+
+
 
 class BaseBuilderClass {
   title: string = ""
