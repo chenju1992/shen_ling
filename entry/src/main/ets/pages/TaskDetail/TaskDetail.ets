@@ -1,4 +1,4 @@
-import { HmNavBar } from '../../components'
+import { HmNavBar , HmToggleCard} from '../../components'
 import router from '@ohos.router'
 import { CommonRouterParams, TaskDetailInfo, TaskDetailInfoModel } from '../../models'
 import { getTaskDetail } from '../../api'
@@ -20,7 +20,9 @@ struct TaskDetail {
   build() {
     Column() {
       HmNavBar({ title: '任务详情' })
-      Text(JSON.stringify(this.taskDetailData))
+      HmToggleCard({title : "基本信息"}){
+        Text(JSON.stringify(this.taskDetailData))
+      }
     }.backgroundColor($r('app.color.background_page')).
     height('100%')
   }
