@@ -8,6 +8,7 @@ import { getTaskDetail } from '../../api'
 struct TaskDetail {
   @State
   taskDetailData: TaskDetailInfoModel = new TaskDetailInfoModel({} as TaskDetailInfo)
+  scroller: Scroller = new Scroller() // 滚动
   aboutToAppear() {
     const params = router.getParams() as CommonRouterParams
     if(params && params.id) {
@@ -17,13 +18,25 @@ struct TaskDetail {
   async getTaskDetail(id: string) {
     this.taskDetailData = await getTaskDetail(id)
   }
+
   build() {
-    Column() {
+    Column () {
       HmNavBar({ title: '任务详情' })
-      HmToggleCard({title : "基本信息"}){
-        Text(JSON.stringify(this.taskDetailData))
+      Scroll(this.scroller) {
+        Column() {
+          HmToggleCard({ title: '基本信息' }) {
+            Text(JSON.stringify(this.TaskDetailData))
+          }
+          HmToggleCard({ title: '基本信息' }) {
+            Text(JSON.stringify(this.TaskDetailData))
+          }
+          HmToggleCard({ title: '基本信息' }) {
+            Text(JSON.stringify(this.TaskDetailData))
+          }
+        }.padding({
+          bottom: 120
+        })
       }
-    }.backgroundColor($r('app.color.background_page')).
-    height('100%')
+    }.backgroundColor($r('app.color.background_page')).height('100%')
   }
 }
