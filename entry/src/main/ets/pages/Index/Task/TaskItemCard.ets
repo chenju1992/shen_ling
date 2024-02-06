@@ -1,8 +1,20 @@
+import router from '@ohos.router'
 import { TaskInfoItem, TaskInfoItemModel } from '../../../models'
 @Preview
 @Component
 struct TaskItemCard {
   taskItemData: TaskInfoItemModel = new TaskInfoItemModel({} as TaskInfoItem)
+
+  aboutToAppear() {
+    const params = router.getParams() as CommonRouterParams
+    if(params && params.id) {
+      AlertDialog.show({
+        message: params.id
+      })
+    }
+  }
+
+
   build() {
     Column() {
       Row() {
@@ -78,6 +90,20 @@ struct TaskItemCard {
     }
     return false
   }
+
+  // 去提货
+  toPickUp () {
+    if(this.getBtnEnable()) {
+      router.pushUrl({
+        url: 'pages/TaskDetail/TaskDetail',
+        params: {
+          id: this.taskItemData.id
+        }
+      })
+    }
+  }
+
+
 
 }
 
