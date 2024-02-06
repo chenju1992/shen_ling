@@ -3,7 +3,7 @@ export * from './user'
 export * from './tab'
 export * from './task'
 export * from  './router'
-
+export * from './task_detail'
 
 export class ResponseData<T> {
   code: number = 0
