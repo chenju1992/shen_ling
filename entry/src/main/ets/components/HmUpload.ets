@@ -2,6 +2,7 @@ import picker from '@ohos.file.picker';
 import fs from '@ohos.file.fs'
 import util from '@ohos.util';
 import request from '@ohos.request';
+import { uploadImage } from '../api/upload';
 
 @Component
 struct HmUpload {
@@ -36,6 +37,7 @@ struct HmUpload {
             // 这里说明一下 internal协议会自动获取当前上下文协议的沙箱路径
             type: 'jpg'
           })
+          const  images =  await uploadImage(getContext(this),files)
         })
         AlertDialog.show({
           message: JSON.stringify(files)
