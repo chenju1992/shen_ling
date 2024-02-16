@@ -3,12 +3,16 @@ import fs from '@ohos.file.fs'
 import util from '@ohos.util';
 import request from '@ohos.request';
 import { uploadImage } from '../api/upload';
+import { ImageList } from '../models';
 
 @Component
 struct HmUpload {
   title: string = ""
   maxNumber : number = 3
 
+
+  @ObjectLink
+  upClass: HmUploadClass
   // 弹出相册选择器
   async selectImage() {
     let photoPicker = new picker.PhotoViewPicker();
@@ -22,7 +26,7 @@ struct HmUpload {
         let files: request.File[] = []
         const addFolderName = 'ju_chen'
         const defaultDir = getContext(this).cacheDir + '/' + addFolderName // 默认路径
-        result.photoUris.forEach(url => {
+        result.photoUris.forEach( async url => {
           const file = fs.openSync(url, fs.OpenMode.READ_ONLY) // 同步读取
           const tempFileName = util.generateRandomUUID() + '.jpg' // 生成一个唯一的文件名 后面有用
           if (!fs.listFileSync(getContext(this).cacheDir).includes(addFolderName)) {
@@ -37,7 +41,11 @@ struct HmUpload {
             // 这里说明一下 internal协议会自动获取当前上下文协议的沙箱路径
             type: 'jpg'
           })
-          const  images =  await uploadImage(getContext(this),files)
+        })
+        const  images =  await uploadImage(getContext(this),files)
+        const urls = await uploadImage(getContext(this), files)
+        AlertDialog.show({
+          message: JSON.stringify(urls)
         })
         AlertDialog.show({
           message: JSON.stringify(files)
@@ -73,4 +81,10 @@ struct HmUpload {
     }.alignItems(HorizontalAlign.Start).width('100%')
   }
 }
+
+@Observed
+class HmUploadClass {
+  images: ImageList[] = []
+}
+
 export { HmUpload }
