@@ -1,6 +1,7 @@
 import picker from '@ohos.file.picker';
 import fs from '@ohos.file.fs'
 import util from '@ohos.util';
+import request from '@ohos.request';
 
 @Component
 struct HmUpload {
@@ -18,7 +19,7 @@ struct HmUpload {
       try {
         // 循环处理
         let files: request.File[] = []
-        const addFolderName = 'laogao'
+        const addFolderName = 'ju_chen'
         const defaultDir = getContext(this).cacheDir + '/' + addFolderName // 默认路径
         result.photoUris.forEach(url => {
           const file = fs.openSync(url, fs.OpenMode.READ_ONLY) // 同步读取
