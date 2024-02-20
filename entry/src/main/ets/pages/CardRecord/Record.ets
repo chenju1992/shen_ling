@@ -1,4 +1,7 @@
-import { HmNavBar, HmCard, HmCardItem } from '../../components'
+import router from '@ohos.router'
+import { getTaskDetail } from '../../api'
+import { HmNavBar, HmCard, HmCardItem, HmCheckBox } from '../../components'
+import { CommonRouterParams, TaskDetailInfo, TaskDetailInfoModel } from '../../models'
 @Entry
 @Component
 struct CarRecord {
@@ -26,6 +29,9 @@ struct CarRecord {
           leftTitle: '出车时间',
           rightText: this.taskDetailData.actualDepartureTime
         })
+        HmCheckBox({ value: false, title: '车辆违章' })
+        HmCheckBox({ value: false, title: '车辆故障' })
+        HmCheckBox({ value: false, title: '车辆事故' })
       }
       // 底部内容
       Row() {
