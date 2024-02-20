@@ -1,5 +1,5 @@
 import router from '@ohos.router'
-import { TaskInfoItem, TaskInfoItemModel } from '../../../models'
+import { CommonRouterParams, TaskInfoItem, TaskInfoItemModel, TaskTypeEnum } from '../../../models'
 @Preview
 @Component
 struct TaskItemCard {
@@ -67,13 +67,13 @@ struct TaskItemCard {
           Text(this.taskItemData.planDepartureTime).fontSize(14).fontColor($r('app.color.text_secondary')).margin({ top: 4 })
         }.alignItems(HorizontalAlign.Start)
 
-        Button("提货", { type: ButtonType.Capsule })
+        Button(this.getBtnText(), { type: ButtonType.Capsule })
           .backgroundColor(this.getBtnEnable() ? $r('app.color.primary') : $r('app.color.primary_disabled'))
           .fontColor($r("app.color.white"))
           .fontSize(14)
           .height(32)
           .enabled(this.getBtnEnable())
-
+          .onClick(()=>this.toPickUp())
 
       }.justifyContent(FlexAlign.SpaceBetween).width('100%')
     }
@@ -84,12 +84,37 @@ struct TaskItemCard {
 
   }
 
+  // 获取按钮可用性
   getBtnEnable() {
+    const value = this.taskItemData.status.toString()
     if (this.taskItemData.enablePickUp) {
       return true
     }
-    return false
+    switch (value) {
+      case TaskTypeEnum.Line.toString():
+      case TaskTypeEnum.Delivered.toString():
+        return true
+      default:
+        return false
+    }
   }
+
+  // 获取按钮显示文本
+  getBtnText() {
+    const value = this.taskItemData.status.toString()
+    switch (value) {
+      case TaskTypeEnum.Waiting.toString():
+        return "提货"
+      case TaskTypeEnum.Line.toString():
+        return "交货"
+      case TaskTypeEnum.Delivered.toString():
+        return "回车登记"
+      default:
+        return ""
+    }
+  }
+
+
 
   // 去提货
   toPickUp () {

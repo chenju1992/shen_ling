@@ -21,9 +21,9 @@ struct TaskList {
   async getTaskList(append: boolean) {
     const result = await getTaskList(this.queryParams)
     if(append) {
-      this.taskListData = this.taskListData.concat(result.items) // 连接新的数组
+      this.taskListData = this.taskListData.concat(result.items || []) // 连接新的数组
     }else {
-      this.taskListData = result.items
+      this.taskListData = result.items || []
     }
     this.allPage = result.pages // 赋值总页数
     this.queryParams.page++ // 页码+1
@@ -41,21 +41,25 @@ struct TaskList {
   renderItem (item: object) {
     TaskItemCard({ taskItemData: item as TaskInfoItemModel })
   }
+
   build() {
-    HmList({
-      onLoad: async () => {
-        await this.getTaskList(true)
-      },
-      onRefresh: async () => {
-        await this.onRefresh()
-      },
-      dataSource: $taskListData,
-      renderItem: this.renderItem,
-      finished: this.allPage < this.queryParams.page,
-      finishText: '没啦没啦',
-      loadingText: '拼命加载中'
-    })
+    Column() {
+      HmList({
+        onLoad: async () => {
+          await this.getTaskList(true)
+        },
+        onRefresh: async () => {
+          await this.onRefresh()
+        },
+        dataSource: $taskListData,
+        renderItem: this.renderItem,
+        finished: this.allPage < this.queryParams.page,
+        finishText: '没啦没啦',
+        loadingText: '拼命加载中'
+      })
+    }.height('100%')
   }
+
 }
 
 export default TaskList

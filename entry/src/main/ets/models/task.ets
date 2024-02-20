@@ -129,8 +129,10 @@ export class TaskInfoItemModel implements TaskInfoItem {
     this.transportTaskId = model.transportTaskId
   }
 }
+
 export enum TaskTypeEnum {
-  Waiting = 1,
-  Line = 2,
-  Finish = 6
+  Waiting = 1, // 待提货
+  Line = 2, // 在途待交货
+  Delivered = 4, // 已交货待回车登记
+  Finish = 6 // 已完成
 }

@@ -1,18 +1,65 @@
-import { HmNavBar , HmToggleCard, HmUpload} from '../../components'
+import { HmLoading, HmNavBar , HmToggleCard, HmUpload, HmUploadClass} from '../../components'
 import router from '@ohos.router'
-import { CommonRouterParams, TaskDetailInfo, TaskDetailInfoModel } from '../../models'
-import { getTaskDetail } from '../../api'
+import { CommonRouterParams, PickUpParamsModel, TaskDetailInfo, TaskDetailInfoModel } from '../../models'
+import { getTaskDetail, pickUp } from '../../api'
+import promptAction from '@ohos.promptAction'
 
 @Entry
 @Component
 struct TaskDetail {
-  @State
-  taskDetailData: TaskDetailInfoModel = new TaskDetailInfoModel({} as TaskDetailInfo)
+
+  @State taskDetailData: TaskDetailInfoModel = new TaskDetailInfoModel({} as TaskDetailInfo)
+
+
+  @State @Watch('updateCargoPickUp') cargoPickUpClass: HmUploadClass = new HmUploadClass() // 提货凭证
+
+  @State @Watch('updateCargo') cargoClass: HmUploadClass = new HmUploadClass() // 提货图片
 
   scroller: Scroller = new Scroller() // 滚动
 
+  layer: CustomDialogController = new CustomDialogController({
+    customStyle: true,
+    alignment: DialogAlignment.Center,
+    builder: HmLoading({ loadingText: '详情加载中' })
+  })
+
+  updateCargoPickUp () {
+    this.taskDetailData.cargoPickUpPictureList = this.cargoPickUpClass.images
+  }
+  updateCargo() {
+    this.taskDetailData.cargoPictureList = this.cargoClass.images
+  }
+
+  // 获取提货状态
+  getPickUpState () {
+    return this.taskDetailData.cargoPickUpPictureList?.length > 0 &&
+    this.taskDetailData.cargoPictureList?.length > 0
+    && this.taskDetailData.cargoPickUpPictureList.every(item => !!item.url)
+    && this.taskDetailData.cargoPictureList.every(item => !!item.url)
+  }
+
+
   async getTaskDetail(id: string) {
+    this.layer.open()
     this.taskDetailData = await getTaskDetail(id)
+    // 赋值提货数据
+    this.cargoPickUpClass.images = this.taskDetailData.cargoPickUpPictureList || []
+    this.cargoClass.images = this.taskDetailData.cargoPictureList || []
+    this.layer.close()
+  }
+
+  // 提货
+  async btnPickUp () {
+    await pickUp(new PickUpParamsModel({
+      id: this.taskDetailData.id,
+      cargoPickUpPictureList: this.taskDetailData.cargoPickUpPictureList,
+      cargoPictureList: this.taskDetailData.cargoPictureList
+    }))
+    promptAction.showToast({
+      message: '提货成功',
+      duration: 3000
+    })
+    this.getTaskDetail(this.taskDetailData.id) // 重新加载数据
   }
 
   @Builder
@@ -155,10 +202,11 @@ struct TaskDetail {
     }
   }
 
+  // 提货信息内容
   @Builder
   getPickUpContent() {
-    HmUpload({ title: '请拍照上传回单凭证' })
-    HmUpload({ title: '请拍照上传货品照片' })
+    HmUpload({ title: '请拍照上传回单凭证', upClass: this.cargoPickUpClass })
+    HmUpload({ title: '请拍照上传货品照片', upClass: this.cargoClass })
   }
 
   // 底部按钮结构
@@ -173,11 +221,15 @@ struct TaskDetail {
         .height(50)
         .width(125)
       Button("提货", { type: ButtonType.Capsule })
-        .backgroundColor($r('app.color.primary_disabled'))
+        .backgroundColor(this.getPickUpState() ? $r('app.color.primary') : $r('app.color.primary_disabled'))
+        .enabled(this.getPickUpState())
         .fontColor($r('app.color.white'))
         .height(50)
         .flexGrow(1)
         .margin({ left: 13 })
+        .onClick(() => {
+        this.btnPickUp()
+      })
     }
     .width('100%')
     .padding({ left: 15, right: 15 })
@@ -188,6 +240,7 @@ struct TaskDetail {
     .position({ y: '100%' })
     .translate({ y: -70 })
   }
+
 
 
 

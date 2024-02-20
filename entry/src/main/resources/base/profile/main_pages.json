@@ -1,12 +1,9 @@
 {
   "src": [
     "pages/Index/Index",
-    "pages/Index/My/My",
-    "pages/Index/Task/TaskItemCard",
-    "pages/Index/Task/TaskList",
-    "pages/Index/Task/TaskTabs",
     "pages/Start/Start",
     "pages/Login/Login",
     "pages/Setting/Setting",
+    "pages/TaskDetail/TaskDetail"
   ]
 }

@@ -4,6 +4,8 @@ export * from './tab'
 export * from './task'
 export * from  './router'
 export * from './task_detail'
+export * from './pick_up'
+export * from './common'
 
 export class ResponseData<T> {
   code: number = 0

@@ -1,3 +1,5 @@
+import { ImageList } from './common'
+
 /** 响应数据，响应数据 */
 export interface TaskDetailInfo {
   /** 实际到达时间 */
@@ -71,10 +73,6 @@ export interface ExceptionList {
   handleResult: string;
 }
 
-export interface ImageList {
-  /** 图片url */
-  url: string;
-}
 export class TaskDetailInfoModel implements TaskDetailInfo {
   actualArrivalTime: string = ''
   actualDepartureTime: string = ''
@@ -151,10 +149,4 @@ export class ExceptionListModel implements ExceptionList {
     this.handleResult = model.handleResult
   }
 }
-export class ImageListModel implements ImageList {
-  url: string = ''
 
-  constructor(model: ImageList) {
-    this.url = model.url
-  }
-}
