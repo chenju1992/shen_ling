@@ -13,6 +13,9 @@ struct HmUpload {
   loadingText: string = ""
   maxNumber : number = 3
 
+  @Prop
+  canUpload:boolean = true
+
   layer: CustomDialogController = new CustomDialogController({
     customStyle: true,
     alignment: DialogAlignment.Center,
@@ -87,13 +90,16 @@ struct HmUpload {
               .width(95)
               .height(95)
               .borderRadius(4)
-            Image($r('app.media.ic_btn_delete')).width(30).height(30)
-              .onClick(() => {
-                this.upClass.images = this.upClass.images.filter((_,i) => i !== index)
-              })
+            if(this.canUpload){
+              Image($r('app.media.ic_btn_delete')).width(30).height(30)
+                .onClick(() => {
+                  this.upClass.images = this.upClass.images.filter((_,i) => i !== index)
+                })
+            }
+
           }.margin({ right: 15, bottom: 10 })
         })
-        if(this.maxNumber > this.upClass.images.length) {
+        if(this.maxNumber > this.upClass.images.length && this.canUpload) {
           Row() {
             Image($r("app.media.ic_add_img")).width(30).height(30)
           }

@@ -1,7 +1,7 @@
 import { HmLoading, HmNavBar , HmToggleCard, HmUpload, HmUploadClass} from '../../components'
 import router from '@ohos.router'
-import { CommonRouterParams, PickUpParamsModel, TaskDetailInfo, TaskDetailInfoModel, TaskTypeEnum } from '../../models'
-import { getTaskDetail, pickUp } from '../../api'
+import { CommonRouterParams, DeliverParamsTypeModel, PickUpParamsModel, TaskDetailInfo, TaskDetailInfoModel, TaskTypeEnum } from '../../models'
+import { deliver, getTaskDetail, pickUp } from '../../api'
 import promptAction from '@ohos.promptAction'
 
 @Entry
@@ -88,6 +88,19 @@ struct TaskDetail {
     this.taskDetailData.certificatePictureList?.length > 0
     && this.taskDetailData.deliverPictureList.every(item => !!item.url)
     && this.taskDetailData.certificatePictureList.every(item => !!item.url)
+  }
+
+  // 交货
+  async btnDeliver () {
+    await deliver(new DeliverParamsTypeModel({
+      id: this.taskDetailData.id,
+      certificatePictureList: this.taskDetailData.certificatePictureList,
+      deliverPictureList: this.taskDetailData.deliverPictureList
+    }))
+    promptAction.showToast({
+      message: '交货成功'
+    })
+    this.getTaskDetail(this.taskDetailData.id) // 重新加载数据
   }
 
 
@@ -183,6 +196,8 @@ struct TaskDetail {
   }
 
 
+
+
   // 司机信息
   @Builder
   getDriverContent() {
@@ -222,11 +237,19 @@ struct TaskDetail {
     })
   }
 
+  // 交货信息内容
   @Builder
-  getDeliverContent () {
-    HmUpload({ title: '请拍照上传交货凭证', upClass: this.certificateClass })
-    HmUpload({ title: '请拍照上传交货货品照片', upClass: this.deliverClass })
+  getDeliverContent() {
+    HmUpload({
+      title: '请拍照上传交货凭证', upClass: this.certificateClass,
+      canUpload: this.taskDetailData.status === TaskTypeEnum.Line
+    })
+    HmUpload({
+      title: '请拍照上传交货货品照片', upClass: this.deliverClass,
+      canUpload: this.taskDetailData.status === TaskTypeEnum.Line
+    })
   }
+
 
 
 
@@ -241,8 +264,14 @@ struct TaskDetail {
   // 提货信息内容
   @Builder
   getPickUpContent() {
-    HmUpload({ title: '请拍照上传回单凭证', upClass: this.cargoPickUpClass })
-    HmUpload({ title: '请拍照上传货品照片', upClass: this.cargoClass })
+    HmUpload({
+      title: '请拍照上传回单凭证', upClass: this.cargoPickUpClass,
+      canUpload: this.taskDetailData.status === TaskTypeEnum.Waiting
+    })
+    HmUpload({
+      title: '请拍照上传货品照片', upClass: this.cargoClass,
+      canUpload: this.taskDetailData.status === TaskTypeEnum.Waiting
+    })
   }
 
   // 底部按钮结构
@@ -275,12 +304,14 @@ struct TaskDetail {
           .height(50)
           .width(125)
         Button("交付", { type: ButtonType.Capsule })
-          .backgroundColor(this.getDeliverState() ? $r('app.color.primary') :  $r('app.color.primary_disabled'))
+          .backgroundColor(this.getDeliverState() ? $r('app.color.primary') : $r('app.color.primary_disabled'))
           .fontColor($r('app.color.white'))
           .height(50)
           .flexGrow(1)
-          .margin({ left: 13 })
           .enabled(this.getDeliverState())
+          .margin({ left: 13 }).onClick(() => {
+          this.btnDeliver()
+        })
       }
 
     }
@@ -315,16 +346,34 @@ struct TaskDetail {
             this.getTransLineContent()
           }
           // 提货时显示提货照片
-          if(this.taskDetailData.status === TaskTypeEnum.Waiting) {
+          if(this.taskDetailData.status === TaskTypeEnum.Waiting || this.taskDetailData.status === TaskTypeEnum.Delivered) {
             HmToggleCard({ title: '提货信息' }) {
               this.getPickUpContent()
             }
           }
           // 交货时显示交货照片
-          if(this.taskDetailData.status === TaskTypeEnum.Line) {
+          if(this.taskDetailData.status === TaskTypeEnum.Line || this.taskDetailData.status === TaskTypeEnum.Delivered) {
             HmToggleCard({ title: '交货信息' }) {
               this.getDeliverContent()
             }
+          }
+          else if(this.taskDetailData.status === TaskTypeEnum.Delivered) {
+            Row() {
+              // 已交付显示回车登记
+              Button("回车登记", { type: ButtonType.Capsule })
+                .backgroundColor($r('app.color.primary'))
+                .fontColor($r('app.color.white'))
+                .height(50)
+                .width('80%')
+                .onClick(() => {
+                  router.pushUrl({
+                    url: 'pages/CarRecord/CarRecord',
+                    params: {
+                      id: this.taskDetailData.id
+                    }
+                  })
+                })
+            }.width('100%').justifyContent(FlexAlign.Center)
           }
         }.padding({
           bottom: 120

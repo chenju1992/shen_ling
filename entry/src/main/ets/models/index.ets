@@ -6,6 +6,8 @@ export * from  './router'
 export * from './task_detail'
 export * from './pick_up'
 export * from './common'
+export * from './deliver'
+export * from './car_record'
 
 export class ResponseData<T> {
   code: number = 0
