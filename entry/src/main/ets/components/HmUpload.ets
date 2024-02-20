@@ -5,6 +5,7 @@ import request from '@ohos.request';
 import { uploadImage } from '../api/upload';
 import { ImageList } from '../models';
 import { HmLoading } from '.';
+import { HmPreview } from './HmPreview'
 
 @Component
 struct HmUpload {
@@ -13,6 +14,11 @@ struct HmUpload {
   loadingText: string = ""
   maxNumber : number = 3
 
+  @State
+  list: string[] = []
+  @State
+  index: number = -1
+
   @Prop
   canUpload:boolean = true
 
@@ -20,6 +26,15 @@ struct HmUpload {
     customStyle: true,
     alignment: DialogAlignment.Center,
     builder: HmLoading({ loadingText: '图片上传中' })
+  })
+
+  preview: CustomDialogController = new CustomDialogController({
+    customStyle: true,
+    alignment: DialogAlignment.Center,
+    builder: HmPreview({
+      urls: this.list,
+      selectIndex: this.index
+    })
   })
 
   @ObjectLink
@@ -90,6 +105,11 @@ struct HmUpload {
               .width(95)
               .height(95)
               .borderRadius(4)
+              .onClick(() => {
+                this.list = this.upClass.images.map(item => item.url)
+                this.index = index
+                this.preview.open()
+              })
             if(this.canUpload){
               Image($r('app.media.ic_btn_delete')).width(30).height(30)
                 .onClick(() => {
