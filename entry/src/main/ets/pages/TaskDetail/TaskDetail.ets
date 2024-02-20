@@ -82,6 +82,16 @@ struct TaskDetail {
     this.getTaskDetail(this.taskDetailData.id) // 重新加载数据
   }
 
+  // 获取交货状态
+  getDeliverState () {
+    return this.taskDetailData.deliverPictureList?.length > 0 &&
+    this.taskDetailData.certificatePictureList?.length > 0
+    && this.taskDetailData.deliverPictureList.every(item => !!item.url)
+    && this.taskDetailData.certificatePictureList.every(item => !!item.url)
+  }
+
+
+
   @Builder
   getBaseContentItem(item: BaseBuilderClass) {
     Row() {
@@ -264,13 +274,13 @@ struct TaskDetail {
           .fontSize(16)
           .height(50)
           .width(125)
-        Button("交货", { type: ButtonType.Capsule })
+        Button("交付", { type: ButtonType.Capsule })
+          .backgroundColor(this.getDeliverState() ? $r('app.color.primary') :  $r('app.color.primary_disabled'))
           .fontColor($r('app.color.white'))
           .height(50)
           .flexGrow(1)
           .margin({ left: 13 })
-          .backgroundColor(this.getPickUpState() ? $r('app.color.primary') : $r('app.color.primary_disabled'))
-          .enabled(this.getPickUpState())
+          .enabled(this.getDeliverState())
       }
 
     }
