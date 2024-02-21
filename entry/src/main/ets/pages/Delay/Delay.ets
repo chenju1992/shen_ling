@@ -1,4 +1,6 @@
 import router from '@ohos.router'
+import promptAction from '@ohos.promptAction'
+import { delay } from '../../api'
 import { HmNavBar, HmCard, HmCardItem } from '../../components'
 import { HmDateTimePicker } from '../../components/HmDateTimePicker'
 import { CommonRouterParams, DelayParamsType, DelayParamsTypeModel } from '../../models'
@@ -26,6 +28,14 @@ struct Delay {
 
   getBtnEnable() {
     return !!(this.delayForm.id && this.delayForm.delayReason && this.delayForm.delayTime)
+  }
+
+  async delay() {
+    await delay(this.delayForm)
+    promptAction.showToast({
+      message: '延迟收货成功'
+    })
+    router.back()
   }
 
   aboutToAppear() {
