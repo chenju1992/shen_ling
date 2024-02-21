@@ -32,6 +32,15 @@
            zoom: 15, //级别
            center: [116.397428, 39.90923], //中心点坐标
          })
+
+         window.onload = async function () {
+          if(window.shenling) {
+            shenling.getLocation("getLocation")
+          }
+        }
+        function getLocation (lon, lat) {
+          map.setZoomAndCenter(18, [lon, lat])
+        }
    
        </script>
 </body>
