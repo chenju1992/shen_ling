@@ -1,8 +1,31 @@
+import router from '@ohos.router'
 import { HmCard, HmCardItem, HmNavBar, HmUpload, HmUploadClass } from '../../components'
+import { HmDateTimePicker } from '../../components/HmDateTimePicker'
+import { CommonRouterParams } from '../../models'
+import { ExceptionParamsType, ExceptionParamsTypeModel } from '../../models/Exception'
 @Entry
 @Component
 struct ExceptionReport {
-  @State exceptionImagesList: HmUploadClass = new HmUploadClass()
+  @State
+  exceptionImagesList: HmUploadClass = new HmUploadClass()
+  @State
+  exceptionForm: ExceptionParamsTypeModel = new ExceptionParamsTypeModel({} as ExceptionParamsType)
+  dateTimePicker: CustomDialogController = new CustomDialogController({
+    builder: HmDateTimePicker({
+      onFinish: (value) => {
+        this.exceptionForm.exceptionTime = value // 赋值时间
+      }
+    }),
+    alignment: DialogAlignment.Bottom,
+    customStyle: true,
+    autoCancel: false
+  })
+  aboutToAppear() {
+    const params = router.getParams() as CommonRouterParams
+    if(params && params.id) {
+      this.exceptionForm.transportTaskId = params.id
+    }
+  }
   build() {
     Column() {
       HmNavBar({ title: '上报异常' })
@@ -11,6 +34,12 @@ struct ExceptionReport {
         HmCardItem({ leftTitle: '上报位置', rightText: '请选择' })
         HmCardItem({ leftTitle: '异常类型', rightText: '请选择' })
         HmCardItem({ leftTitle: '异常描述', rightText: '', showRightIcon: false, showBottomBorder: false })
+        HmCardItem({ leftTitle: '异常时间', rightText: this.exceptionForm.exceptionTime || '请选择',
+          showRightIcon: false, showBottomBorder: false,
+          onRightClick: () => {
+            this.dateTimePicker.open()
+          }
+        })
         TextArea({
           placeholder: '请输入异常描述'
         }).height(130).borderRadius(8).placeholderColor($r('app.color.text_secondary')).fontSize(14)

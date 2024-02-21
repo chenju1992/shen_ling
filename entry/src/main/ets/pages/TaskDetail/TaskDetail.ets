@@ -311,7 +311,14 @@ struct TaskDetail {
           .fontColor($r('app.color.text_primary'))
           .fontSize(16)
           .height(50)
-          .width(125)
+          .width(125).onClick(() => {
+          router.pushUrl({
+            url: 'pages/Exception/ExceptionReport',
+            params: {
+              id: this.taskDetailData.transportTaskId
+            }
+          })
+        })
         Button("交付", { type: ButtonType.Capsule })
           .backgroundColor(this.getDeliverState() ? $r('app.color.primary') : $r('app.color.primary_disabled'))
           .fontColor($r('app.color.white'))
