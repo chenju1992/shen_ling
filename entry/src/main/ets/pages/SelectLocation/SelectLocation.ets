@@ -1,11 +1,16 @@
 import router from '@ohos.router'
 import { HmNavBar, HmCard, HmCardItem } from '../../components'
 import geoLocationManager from '@ohos.geoLocationManager';
+import webview from '@ohos.web.webview';
 
 
 @Entry
 @Component
 struct SelectLocation {
+
+  webController: WebView.WebviewController = new webview.WebviewController()
+
+
   aboutToAppear() {
     this.getLocation()
   }
@@ -25,6 +30,7 @@ struct SelectLocation {
   build() {
     Column() {
       HmNavBar({ title: '当前位置' })
+      Web({ src: $rawfile('location.html'), controller: this.webController }).height('100%')
       //  地图区域
       Text("地图")
       Column() {
