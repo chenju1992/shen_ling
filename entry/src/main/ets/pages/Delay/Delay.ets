@@ -1,5 +1,7 @@
+import router from '@ohos.router'
 import { HmNavBar, HmCard, HmCardItem } from '../../components'
-import { DelayParamsType, DelayParamsTypeModel } from '../../models'
+import { HmDateTimePicker } from '../../components/HmDateTimePicker'
+import { CommonRouterParams, DelayParamsType, DelayParamsTypeModel } from '../../models'
 @Entry
 @Component
 struct Delay {
@@ -7,6 +9,21 @@ struct Delay {
   delayForm: DelayParamsTypeModel = new DelayParamsTypeModel({} as DelayParamsType)
   @State
   oldTime: string = ""
+  @State
+  maxSizeNumber:number = 50
+
+
+  dateTimePicker: CustomDialogController = new CustomDialogController({
+    builder: HmDateTimePicker({
+      onFinish: (value) => {
+        this.delayForm.delayTime = value // 赋值时间
+      }
+    }),
+    alignment: DialogAlignment.Bottom,
+    customStyle: true,
+    autoCancel: false
+  })
+
   aboutToAppear() {
     const params = router.getParams() as CommonRouterParams
     if(params && params.id && params.oldTime) {
@@ -20,11 +37,16 @@ struct Delay {
       HmNavBar({ title: '延迟提货' })
       HmCard(){
         HmCardItem({ leftTitle: '原定时间', rightText: this.oldTime, showRightIcon: false })
-        HmCardItem({ leftTitle: '延迟时间', rightText: '' })
-        TextArea({ placeholder: '请输入延迟提货原因' }).backgroundColor($r('app.color.background_page')).margin({
+        HmCardItem({ leftTitle: '延迟时间', rightText: this.delayForm.delayTime, onRightClick : ()=>{
+          this.dateTimePicker.open()} })
+        TextArea({ placeholder: '请输入延迟提货原因', text: this.delayForm.delayReason}).backgroundColor($r('app.color.background_page')).margin({
           top: 20
-        }).borderRadius(8).height(130).placeholderColor($r('app.color.text_secondary')).fontSize(14)
-        Text('0/50').margin({
+        }).borderRadius(8).height(130).placeholderColor($r('app.color.text_secondary')).fontSize(14).onChange((value) => {
+          if (value.length <= this.maxSizeNumber) {
+            this.delayForm.delayReason = value
+          }
+        })
+        Text(`${this.delayForm.delayReason?.length || 0}/${this.maxSizeNumber}`).margin({
           top: -30
         }).textAlign(TextAlign.End).width('100%').padding({ right: 15 }).fontColor($r('app.color.text_secondary'))
         Row() {
