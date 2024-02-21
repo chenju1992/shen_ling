@@ -41,6 +41,7 @@ struct SelectLocation {
     })
   }
 
+
   build() {
     Column() {
       HmNavBar({ title: '当前位置' })
@@ -58,6 +59,14 @@ struct SelectLocation {
           HmCard() {
             ForEach(this.list, (item: AddressItem) => {
               HmCardItem({ leftTitle: item.address, rightText: item.distance ? `${item.distance}米` : '' })
+                .onClick(() => {
+                  router.back({
+                    url: "pages/ExceptionReport/ExceptionReport",
+                    params: {
+                      address: item.address.substring(0, 7)
+                    }
+                  })
+                })
             })
           }
           // HmCardItem({ leftTitle: '回龙观街道', rightText: '100m以内' })

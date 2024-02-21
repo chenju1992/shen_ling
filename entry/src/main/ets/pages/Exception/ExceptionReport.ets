@@ -75,12 +75,25 @@ struct ExceptionReport {
       this.exceptionForm.transportTaskId = params.id
     }
   }
+
+  onPageShow() {
+    const params = router.getParams() as CommonRouterParams
+    if(params && params.address) {
+      this.exceptionForm.exceptionPlace = params.address
+    }
+  }
+
+
   build() {
     Column() {
       HmNavBar({ title: '上报异常' })
       HmCard() {
         HmCardItem({ leftTitle: '异常时间', rightText: '请选择' })
-        HmCardItem({ leftTitle: '上报位置', rightText: '请选择' })
+        HmCardItem({ leftTitle: '上报位置', rightText: this.exceptionForm.exceptionPlace || '请选择', onRightClick: () => {
+          router.pushUrl({
+            url: 'pages/SelectLocation/SelectLocation'
+          })
+        }})
         HmCardItem({ leftTitle: '异常类型', rightText: this.exceptionForm.exceptionType || '请选择', showBottomBorder: false,
           onRightClick: () => {
             this.typeDialog.open()
