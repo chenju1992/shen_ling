@@ -20,6 +20,15 @@ struct ExceptionReport {
     customStyle: true,
     autoCancel: false
   })
+  // 异常类型弹层
+  typeDialog: CustomDialogController = new CustomDialogController({
+    builder: HmSelectCard({ cardContent: () =>  { this.getCardContent } }),
+    autoCancel: false,
+    customStyle: true,
+    alignment: DialogAlignment.Bottom
+  })
+  @Builder
+  getCardContent () {}
   aboutToAppear() {
     const params = router.getParams() as CommonRouterParams
     if(params && params.id) {
@@ -32,7 +41,7 @@ struct ExceptionReport {
       HmCard() {
         HmCardItem({ leftTitle: '异常时间', rightText: '请选择' })
         HmCardItem({ leftTitle: '上报位置', rightText: '请选择' })
-        HmCardItem({ leftTitle: '异常类型', rightText: '请选择' })
+        HmCardItem({ leftTitle: '异常类型', rightText: '请选择', onRightClick:()=>{this.typeDialog.open()}})
         HmCardItem({ leftTitle: '异常描述', rightText: '', showRightIcon: false, showBottomBorder: false })
         HmCardItem({ leftTitle: '异常时间', rightText: this.exceptionForm.exceptionTime || '请选择',
           showRightIcon: false, showBottomBorder: false,
