@@ -3,6 +3,8 @@ import { HmCard, HmCardItem, HmNavBar, HmSelectCard, HmUpload, HmUploadClass } f
 import { HmDateTimePicker } from '../../components/HmDateTimePicker'
 import { CommonRouterParams } from '../../models'
 import { ExceptionParamsType, ExceptionParamsTypeModel } from '../../models/Exception'
+import { exception } from '../../api'
+import promptAction from '@ohos.promptAction'
 @Entry
 @Component
 struct ExceptionReport {
@@ -83,6 +85,15 @@ struct ExceptionReport {
     this.exceptionForm.exceptionDescribe)
   }
 
+  async btnException() {
+    await exception(this.exceptionForm)
+    promptAction.showToast({
+      message: '上报异常成功',
+      duration: 3000
+    })
+    router.back()
+  }
+
   aboutToAppear() {
     const params = router.getParams() as CommonRouterParams
     if(params && params.id) {
@@ -92,10 +103,19 @@ struct ExceptionReport {
 
   onPageShow() {
     const params = router.getParams() as CommonRouterParams
+    if (params && params.id) {
+      this.exceptionForm.transportTaskId = params.id
+    }
     if(params && params.address) {
       this.exceptionForm.exceptionPlace = params.address
     }
   }
+  // onPageShow() {
+  //   const params = router.getParams() as CommonRouterParams
+  //   if(params && params.address) {
+  //     this.exceptionForm.exceptionPlace = params.address
+  //   }
+  // }
 
 
   build() {
@@ -156,6 +176,9 @@ struct ExceptionReport {
           this.getBtnEnable() ?   $r('app.color.primary') :
           $r('app.color.primary_disabled')).
           enabled(this.getBtnEnable())
+          .onClick(() => {
+            this.btnException()
+          })
       }.position({
         y: '100%'
       }).height(70).translate({
