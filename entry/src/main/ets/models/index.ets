@@ -8,6 +8,7 @@ export * from './pick_up'
 export * from './common'
 export * from './deliver'
 export * from './car_record'
+export * from './delay'
 
 export class ResponseData<T> {
   code: number = 0
