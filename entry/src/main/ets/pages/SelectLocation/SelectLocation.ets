@@ -1,9 +1,27 @@
 import router from '@ohos.router'
 import { HmNavBar, HmCard, HmCardItem } from '../../components'
+import geoLocationManager from '@ohos.geoLocationManager';
+
 
 @Entry
 @Component
 struct SelectLocation {
+  aboutToAppear() {
+    this.getLocation()
+  }
+  async getLocation () {
+    try {
+      const result = await geoLocationManager.getCurrentLocation()
+      AlertDialog.show({
+        message: JSON.stringify(result)
+      })
+    }catch (error) {
+      AlertDialog.show({
+        message: error.message
+      })
+    }
+
+  }
   build() {
     Column() {
       HmNavBar({ title: '当前位置' })

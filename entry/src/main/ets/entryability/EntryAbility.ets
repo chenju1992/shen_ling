@@ -1,11 +1,24 @@
 import UIAbility from '@ohos.app.ability.UIAbility';
 import hilog from '@ohos.hilog';
 import window from '@ohos.window';
+import abilityAccessCtrl from '@ohos.abilityAccessCtrl';
 import { UserSettingClass } from '../utils/settings';
+import promptAction from '@ohos.promptAction';
 
 export default class EntryAbility extends UIAbility {
-  onCreate(want, launchParam) {
+  async onCreate(want, launchParam) {
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onCreate');
+    let manager = abilityAccessCtrl.createAtManager()
+    try {
+      await manager.requestPermissionsFromUser(this.context,
+        [
+          'ohos.permission.MEDIA_LOCATION',
+          'ohos.permission.LOCATION',
+          'ohos.permission.APPROXIMATELY_LOCATION',
+        ])
+    } catch (err) {
+      promptAction.showToast({ message: '获取位置失败' })
+    }
   }
 
   onDestroy() {
