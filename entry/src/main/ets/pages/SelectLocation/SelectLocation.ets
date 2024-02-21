@@ -13,8 +13,14 @@ struct SelectLocation {
   webSdk: WebSdkClass = new WebSdkClass()
 
 
+
   aboutToAppear() {
-    this.getLocation()
+    WebSdkClass.Controller = new webview.WebviewController()
+    WebSdkClass.Context = getContext(this)
+    WebSdkClass.Context
+      .eventHub.on('search_list', (json: string) => {
+      AlertDialog.show({ message: json })
+    })
   }
   async getLocation () {
     try {

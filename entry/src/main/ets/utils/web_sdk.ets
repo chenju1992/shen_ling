@@ -4,6 +4,7 @@ import webview from '@ohos.web.webview';
 
 export class WebSdkClass {
   static Controller: webview.WebviewController | null = null
+  static Context: Context | null = null // 声明一个Context
   // 弹出
   alert(message: string) {
     AlertDialog.show({ message })
@@ -18,5 +19,10 @@ export class WebSdkClass {
     }catch (error) {
 
     }
+  }
+
+  // 接收参数 触发事件
+  receiveData(eventName: string, json: string) {
+    WebSdkClass.Context?.eventHub?.emit(eventName, json)
   }
 }
