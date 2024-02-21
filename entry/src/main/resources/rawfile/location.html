@@ -15,8 +15,24 @@
           background-color: pink;
         }
       </style>
+      <script type="text/javascript">
+        window._AMapSecurityConfig = {
+          securityJsCode: "f807b761233316bd17b6a378e9d93752",
+        }
+      </script>
+      <script
+        type="text/javascript"
+        src="https://webapi.amap.com/maps?v=1.4.15&key=17887d5ddec189e5b426e93b6a99fa16"
+      ></script>
 </head>
 <body>
     <div id="container"></div>
+    <script>
+        var map = new AMap.Map("container", {
+           zoom: 15, //级别
+           center: [116.397428, 39.90923], //中心点坐标
+         })
+   
+       </script>
 </body>
 </html>

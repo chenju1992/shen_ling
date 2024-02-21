@@ -8,7 +8,7 @@ import webview from '@ohos.web.webview';
 @Component
 struct SelectLocation {
 
-  webController: WebView.WebviewController = new webview.WebviewController()
+  webController: webview.WebviewController = new webview.WebviewController()
 
 
   aboutToAppear() {
