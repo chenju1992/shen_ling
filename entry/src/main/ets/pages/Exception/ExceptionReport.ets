@@ -1,5 +1,5 @@
 import router from '@ohos.router'
-import { HmCard, HmCardItem, HmNavBar, HmUpload, HmUploadClass } from '../../components'
+import { HmCard, HmCardItem, HmNavBar, HmSelectCard, HmUpload, HmUploadClass } from '../../components'
 import { HmDateTimePicker } from '../../components/HmDateTimePicker'
 import { CommonRouterParams } from '../../models'
 import { ExceptionParamsType, ExceptionParamsTypeModel } from '../../models/Exception'
@@ -10,6 +10,11 @@ struct ExceptionReport {
   exceptionImagesList: HmUploadClass = new HmUploadClass()
   @State
   exceptionForm: ExceptionParamsTypeModel = new ExceptionParamsTypeModel({} as ExceptionParamsType)
+  @State
+  exceptErrorList: string[] = ["发动机启动困难", "不着车、漏油", "照明失灵", "有异常响动", "排烟异常、温度异常", "其他问题"]
+  @State
+  selectIndex: number = 0
+
   dateTimePicker: CustomDialogController = new CustomDialogController({
     builder: HmDateTimePicker({
       onFinish: (value) => {
@@ -22,13 +27,48 @@ struct ExceptionReport {
   })
   // 异常类型弹层
   typeDialog: CustomDialogController = new CustomDialogController({
-    builder: HmSelectCard({ cardContent: () =>  { this.getCardContent } }),
+    builder: HmSelectCard({ cardContent: () => {
+      this.getCardContent()
+    },
+      confirm: () => {
+      this.exceptionForm.exceptionType = this.exceptErrorList[this.selectIndex]
+      this.typeDialog.close()
+    }
+    }),
     autoCancel: false,
     customStyle: true,
     alignment: DialogAlignment.Bottom
   })
+
   @Builder
-  getCardContent () {}
+  getCardContent () {
+    ForEach(this.exceptErrorList, (name:string,index:number) => {
+      this.getSingleItem({name,index} as ExceptionItemClass)
+    })
+  }
+  // 单个的渲染选项
+  @Builder
+  getSingleItem(item:ExceptionItemClass) {
+    Row() {
+      Text(item.name).fontSize(14).fontWeight(400).fontColor($r('app.color.text_primary'))
+      Row() {
+        Image(this.selectIndex === item.index ? $r("app.media.ic_check_true") : $r("app.media.ic_check_false")).width(32).height(32)
+      }.onClick(() => {
+        this.selectIndex = item.index
+      })
+    }
+    .justifyContent(FlexAlign.SpaceBetween)
+    .alignItems(VerticalAlign.Center)
+    .border({
+      width: {
+        bottom: item.index === this.exceptErrorList.length - 1 ? 0 : 1
+      },
+      color: $r('app.color.background_divider')
+    })
+    .width('100%')
+    .height(60)
+  }
+
   aboutToAppear() {
     const params = router.getParams() as CommonRouterParams
     if(params && params.id) {
@@ -41,7 +81,11 @@ struct ExceptionReport {
       HmCard() {
         HmCardItem({ leftTitle: '异常时间', rightText: '请选择' })
         HmCardItem({ leftTitle: '上报位置', rightText: '请选择' })
-        HmCardItem({ leftTitle: '异常类型', rightText: '请选择', onRightClick:()=>{this.typeDialog.open()}})
+        HmCardItem({ leftTitle: '异常类型', rightText: this.exceptionForm.exceptionType || '请选择', showBottomBorder: false,
+          onRightClick: () => {
+            this.typeDialog.open()
+          }
+        })
         HmCardItem({ leftTitle: '异常描述', rightText: '', showRightIcon: false, showBottomBorder: false })
         HmCardItem({ leftTitle: '异常时间', rightText: this.exceptionForm.exceptionTime || '请选择',
           showRightIcon: false, showBottomBorder: false,
@@ -77,4 +121,9 @@ struct ExceptionReport {
     }
     .height('100%').backgroundColor($r('app.color.background_page'))
   }
+}
+
+class ExceptionItemClass {
+  name: string = ""
+  index: number = 0
 }
