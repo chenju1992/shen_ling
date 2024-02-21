@@ -7,6 +7,7 @@ import { ExceptionParamsType, ExceptionParamsTypeModel } from '../../models/Exce
 @Component
 struct ExceptionReport {
   @State
+  @Watch('updateExceptionImagesList')
   exceptionImagesList: HmUploadClass = new HmUploadClass()
   @State
   exceptionForm: ExceptionParamsTypeModel = new ExceptionParamsTypeModel({} as ExceptionParamsType)
@@ -14,6 +15,11 @@ struct ExceptionReport {
   exceptErrorList: string[] = ["发动机启动困难", "不着车、漏油", "照明失灵", "有异常响动", "排烟异常、温度异常", "其他问题"]
   @State
   selectIndex: number = 0
+  maxNumber: number = 50
+
+  updateExceptionImagesList() {
+    this.exceptionForm.exceptionImagesList = this.exceptionImagesList.images
+  }
 
   dateTimePicker: CustomDialogController = new CustomDialogController({
     builder: HmDateTimePicker({
@@ -69,6 +75,14 @@ struct ExceptionReport {
     .height(60)
   }
 
+  getBtnEnable () {
+    return !!(this.exceptionForm.exceptionDescribe &&
+    this.exceptionForm.exceptionPlace &&
+    this.exceptionForm.exceptionTime &&
+    this.exceptionForm.exceptionType &&
+    this.exceptionForm.exceptionDescribe)
+  }
+
   aboutToAppear() {
     const params = router.getParams() as CommonRouterParams
     if(params && params.id) {
@@ -107,8 +121,21 @@ struct ExceptionReport {
           }
         })
         TextArea({
-          placeholder: '请输入异常描述'
-        }).height(130).borderRadius(8).placeholderColor($r('app.color.text_secondary')).fontSize(14)
+          placeholder: '请输入异常描述',
+          text: this.exceptionForm.exceptionDescribe!
+        }).height(130).borderRadius(8).placeholderColor($r('app.color.text_secondary')).fontSize(14).onChange((value) => {
+          if(value.length <= this.maxNumber) {
+            this.exceptionForm.exceptionDescribe = value
+          }
+        })
+        Text(`${this.exceptionForm.exceptionDescribe?.length || 0}/${this.maxNumber}`)
+          .margin({
+            top: -30
+          })
+          .textAlign(TextAlign.End)
+          .width('100%')
+          .padding({ right: 15 })
+          .fontColor($r('app.color.text_secondary'))
         Text(`0/50`)
           .margin({
             top: -30
@@ -125,7 +152,10 @@ struct ExceptionReport {
         Row().height(20)
       }
       Row() {
-        Button("提交").height(50).width(207).backgroundColor($r('app.color.primary_disabled'))
+        Button("提交").height(50).width(207).backgroundColor(
+          this.getBtnEnable() ?   $r('app.color.primary') :
+          $r('app.color.primary_disabled')).
+          enabled(this.getBtnEnable())
       }.position({
         y: '100%'
       }).height(70).translate({
