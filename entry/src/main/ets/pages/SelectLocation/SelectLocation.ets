@@ -2,6 +2,7 @@ import router from '@ohos.router'
 import { HmNavBar, HmCard, HmCardItem } from '../../components'
 import geoLocationManager from '@ohos.geoLocationManager';
 import webview from '@ohos.web.webview';
+import { WebSdkClass } from '../../utils';
 
 
 @Entry
@@ -9,6 +10,7 @@ import webview from '@ohos.web.webview';
 struct SelectLocation {
 
   webController: webview.WebviewController = new webview.WebviewController()
+  webSdk: WebSdkClass = new WebSdkClass()
 
 
   aboutToAppear() {
@@ -30,7 +32,13 @@ struct SelectLocation {
   build() {
     Column() {
       HmNavBar({ title: '当前位置' })
-      Web({ src: $rawfile('location.html'), controller: this.webController }).height('100%')
+      Web({ src: $rawfile('location.html'), controller: WebSdkClass.Controller! }).height('100%')
+        .javaScriptProxy({
+          object: this.webSdk,
+          name: "shenling",
+          methodList: ["toast", "alert", 'getLocation'],
+          controller: WebSdkClass.Controller!,
+        })
       //  地图区域
       Text("地图")
       Column() {
