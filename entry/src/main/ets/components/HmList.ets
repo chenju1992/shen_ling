@@ -1,5 +1,5 @@
 import { HmLoading } from './HmLoading'
-
+import { ListDataSource } from '../models'
 @Component
 struct HmList {
   @State
@@ -9,6 +9,7 @@ struct HmList {
   @Prop
   finished: boolean // 是否结束
   @Link
+  @Watch("updateDataSource")
   dataSource: object[] // 数据源
   @BuilderParam
   renderItem: (item: object) => void
@@ -19,7 +20,11 @@ struct HmList {
   loadingText: string = "加载数据中" // 加载中文本
   finishText: string = "没有内容啦" // 结束文本
   showLoadingIcon: boolean = true // 是否显示加载进度
-
+  lazyDataSource: ListDataSource = new ListDataSource()
+  // 更新数据
+  updateDataSource() {
+    this.lazyDataSource.reloadData(this.dataSource)
+  }
   // 获取底部显示的文本
   @Builder
   getBottomDisplay() {
@@ -49,7 +54,7 @@ struct HmList {
   build() {
     Refresh({ refreshing: $$this.refreshIng }) {
       List() {
-        ForEach(this.dataSource, (item: object) => {
+        LazyForEach(this.lazyDataSource, (item: object) => {
           ListItem() {
             if (this.renderItem) {
               this.renderItem(item)
@@ -77,4 +82,5 @@ struct HmList {
     })
   }
 }
+
 export { HmList }

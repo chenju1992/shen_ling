@@ -12,6 +12,7 @@ export * from './delay'
 export * from './location'
 export * from './message'
 export * from './car'
+export * from './base_datasource'
 
 export class ResponseData<T> {
   code: number = 0
