@@ -5,6 +5,9 @@
   "main": "",
   "author": "",
   "license": "",
-  "dependencies": {}
+  "dependencies": { "dayjs": "^1.11.7"},
+  "devDependencies": {
+    "@ohos/hypium": "1.0.6"
+  }
 }
 

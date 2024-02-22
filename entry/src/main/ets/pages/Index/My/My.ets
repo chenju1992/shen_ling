@@ -1,6 +1,7 @@
 import { HmCard, HmCardItem } from '../../../components'
 import { UserInfo, UserInfoModel, UserTaskInfo, UserTaskInfoModel, UserTaskInfoParamsModel } from '../../../models'
 import { getUserInfo, getUserTaskInfo } from '../../../api'
+import router from '@ohos.router'
 
 @Preview
 @Component
@@ -99,7 +100,11 @@ struct My {
             url: 'pages/Car/Car'
           })
         } })
-        HmCardItem({ leftTitle: '任务设置', rightText: '' })
+        HmCardItem({ leftTitle: '任务设置', rightText: '', onRightClick: () => {
+          router.pushUrl({
+            url: 'pages/UserTask/UserTask'
+          })
+        } })
         HmCardItem({ leftTitle: '系统设置', rightText: '', showBottomBorder: false })
       }
 
