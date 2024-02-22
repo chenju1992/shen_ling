@@ -373,10 +373,13 @@ struct TaskDetail {
     .translate({ y: -70 })
   }
 
-
-
-
-
+  async onPageShow() {
+    const params = router.getParams()  as CommonRouterParams
+    if(params &&  params.addExcept) {
+      const result =  await getTaskDetail(this.taskDetailData.id)
+      this.taskDetailData.exceptionList = result.exceptionList
+    }
+  }
 
 
   build() {

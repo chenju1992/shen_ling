@@ -91,7 +91,12 @@ struct ExceptionReport {
       message: '上报异常成功',
       duration: 3000
     })
-    router.back()
+    router.back({
+      url: 'pages/TaskDetail/TaskDetail',
+      params: {
+        addExcept: true
+      }
+    })
   }
 
   aboutToAppear() {
