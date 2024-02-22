@@ -144,9 +144,14 @@ struct TaskDetail {
         Column() {
           Image($r("app.media.ic_navigation")).width(22).height(22)
           Text("开始导航").fontSize(14).margin({ top: 10, bottom: 10 })
-        }.justifyContent(FlexAlign.SpaceBetween)
-        .margin({
-          top: 20
+        }.justifyContent(FlexAlign.SpaceBetween).alignSelf(ItemAlign.End).flexGrow(1).onClick(() => {
+          router.pushUrl({
+            url: 'pages/Navigation/NavigationPage',
+            params: {
+              start: this.taskDetailData.startAddress,
+              end: this.taskDetailData.endAddress
+            }
+          })
         })
       }
 
