@@ -1,6 +1,7 @@
 import { HmLoading } from './HmLoading'
 import { ListDataSource } from '../models'
 import vibrator from '@ohos.vibrator';
+import { AVPlayerClass } from '../utils'
 
 @Component
 struct HmList {
@@ -81,6 +82,7 @@ struct HmList {
         this.refreshIng = false
         this.loading = false
         vibrator.startVibration({ duration: 300, type: 'time' }, { id: 0, usage: 'touch' })
+        AVPlayerClass.playAudio("success.wav",getContext(this))
       }
     })
   }
