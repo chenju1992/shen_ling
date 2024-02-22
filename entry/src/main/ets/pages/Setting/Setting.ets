@@ -29,9 +29,21 @@ struct Setting {
     Column() {
       HmNavBar({ title: '系统设置' })
       HmCard() {
-        HmCardItem({ leftTitle: '换绑手机', rightText: '' })
-        HmCardItem({ leftTitle: '修改密码', rightText: '' })
-        HmCardItem({ leftTitle: '消息通知设置', rightText: '' })
+        HmCardItem({ leftTitle: '换绑手机', rightText: '', onRightClick: () => {
+          router.pushUrl({
+            url: 'pages/Setting/BindMobile'
+          })
+        } })
+        HmCardItem({ leftTitle: '修改密码', rightText: '', onRightClick: () => {
+          router.pushUrl({
+            url: 'pages/Setting/ChangePassword'
+          })
+        } })
+        HmCardItem({ leftTitle: '消息通知设置', rightText: '', onRightClick: () => {
+          router.pushUrl({
+            url: 'pages/Setting/MessageSend'
+          })
+        } })
         HmCardItem({ leftTitle: '清理缓存', rightText: '', showBottomBorder: false })
         HmCardItem({ leftTitle: '系统设置', rightText: '', onRightClick: () => {
           router.pushUrl({
