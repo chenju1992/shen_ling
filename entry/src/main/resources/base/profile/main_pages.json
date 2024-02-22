@@ -4,6 +4,7 @@
     "pages/Start/Start",
     "pages/Login/Login",
     "pages/Setting/Setting",
-    "pages/TaskDetail/TaskDetail"
+    "pages/TaskDetail/TaskDetail",
+    "pages/Index/Message/MessageDetail"
   ]
 }

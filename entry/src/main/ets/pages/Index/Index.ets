@@ -2,6 +2,7 @@ import { TOKEN_KEY } from '../../constants'
 import { TabClass } from '../../models'
 import My from './My/My'
 import TaskTabs from  './Task/TaskTabs'
+import Message from './Message/Message'
 
 PersistentStorage.PersistProp(TOKEN_KEY, "")
 
@@ -33,6 +34,9 @@ struct Index {
           }
           else if(item.name === 'message') {
             Text("消息组件")
+          }
+          else if(item.name === 'message') {
+            Message()
           }
           else {
             My()

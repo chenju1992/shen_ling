@@ -425,13 +425,15 @@ struct TaskDetail {
             }
           }
           // 提货时显示提货照片
-          if(this.taskDetailData.status === TaskTypeEnum.Waiting || this.taskDetailData.status === TaskTypeEnum.Delivered) {
+          if(this.taskDetailData.status === TaskTypeEnum.Waiting || this.taskDetailData.status === TaskTypeEnum.Delivered
+          ||this.taskDetailData.status === TaskTypeEnum.Finish) {
             HmToggleCard({ title: '提货信息' }) {
               this.getPickUpContent()
             }
           }
           // 交货时显示交货照片
-          if(this.taskDetailData.status === TaskTypeEnum.Line || this.taskDetailData.status === TaskTypeEnum.Delivered) {
+          if(this.taskDetailData.status === TaskTypeEnum.Line || this.taskDetailData.status === TaskTypeEnum.Delivered
+          ||this.taskDetailData.status === TaskTypeEnum.Finish) {
             HmToggleCard({ title: '交货信息' }) {
               this.getDeliverContent()
             }
@@ -461,7 +463,9 @@ struct TaskDetail {
           bottom: 120
         })
       }
-      this.getBottomBtn()
+      if(this.taskDetailData.status != TaskTypeEnum.Finish){
+        this.getBottomBtn()
+      }
     }.backgroundColor($r('app.color.background_page')).height('100%')
   }
 }

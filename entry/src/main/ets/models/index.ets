@@ -10,6 +10,7 @@ export * from './deliver'
 export * from './car_record'
 export * from './delay'
 export * from './location'
+export * from './message'
 
 export class ResponseData<T> {
   code: number = 0

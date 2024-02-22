@@ -7,6 +7,7 @@ import { UserSettingClass } from '.';
 import { TOKEN_KEY } from '../constants'
 
 const httpRequest = http.createHttp()
+interface EmptyInterface {}
 
 async function requestHttp<T>(url: string = "", method: http.RequestMethod = http.RequestMethod.GET, data?: object): Promise<T> {
   let urlStr = BASE_URL + url
@@ -29,7 +30,7 @@ async function requestHttp<T>(url: string = "", method: http.RequestMethod = htt
     },
     method,
     readTimeout: 10000, // 超时时间
-    extraData: method === http.RequestMethod.GET ? "" : data
+    extraData: method === http.RequestMethod.GET ? "" : data || {} as EmptyInterface
   }
   try {
     const res = await httpRequest.request(urlStr, config)
