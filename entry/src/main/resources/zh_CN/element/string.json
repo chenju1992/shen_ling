@@ -11,6 +11,14 @@
     {
       "name": "EntryAbility_label",
       "value": "神领物流"
+    },
+    {
+      "name": "ListenAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "ListenAbility_label",
+      "value": "label"
     }
   ]
 }

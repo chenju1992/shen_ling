@@ -6,6 +6,8 @@
     "pages/Setting/Setting",
     "pages/TaskDetail/TaskDetail",
     "pages/Index/Message/MessageDetail",
-    "pages/Setting/MessageSend"
-  ,"pages/Setting/ChangePassword"]
+    "pages/Setting/MessageSend",
+    "pages/Setting/ChangePassword",
+    "pages/Index"
+  ]
 }

@@ -31,6 +31,7 @@ export default class EntryAbility extends UIAbility {
 
     const userSetting = new UserSettingClass(this.context)
     const advertisementSetting = await userSetting.getUserAdvertisement()
+    this.publishMessage(userSetting)
 
     if(advertisementSetting.isShowId){
       windowStage.loadContent('pages/Start/Start')
@@ -67,5 +68,43 @@ export default class EntryAbility extends UIAbility {
   onBackground() {
     // Ability has back to background
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onBackground');
+  }
+
+  async publishMessage(setting: UserSettingClass) {
+    setTimeout(async () => {
+      if (await setting.getUserToken()) {
+        const want = await wantAgent.getWantAgent({
+          wants: [
+            {
+              bundleName: 'com.itheima.myapplication',
+              abilityName: 'ListenAbility',
+              parameters: {
+                order_id: Date.now()
+              }
+            }
+          ],
+          operationType: wantAgent.OperationType.START_ABILITY,
+          wantAgentFlags: [wantAgent.WantAgentFlags.CONSTANT_FLAG],
+          requestCode: 0
+        })
+        const notifyId = Date.now()
+        AppStorage.SetOrCreate<number>("notifyId", notifyId)
+        const request: notificationManager.NotificationRequest = {
+          id: notifyId,
+          content: {
+            contentType: notificationManager.ContentType.NOTIFICATION_CONTENT_BASIC_TEXT,
+            normal: {
+              title: "温馨提示",
+              text: "您有一个新的订单提醒",
+              additionalText: "物流提醒"
+            },
+          },
+          wantAgent: want
+        }
+        notificationManager.publish(request)
+        AVPlayerClass.playAudio("information.mp3", this.context) // 播放通知信息
+      }
+    }, 10000)
+
   }
 }
