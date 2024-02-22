@@ -1,5 +1,7 @@
 import { HmLoading } from './HmLoading'
 import { ListDataSource } from '../models'
+import vibrator from '@ohos.vibrator';
+
 @Component
 struct HmList {
   @State
@@ -78,6 +80,7 @@ struct HmList {
         await this.onRefresh()
         this.refreshIng = false
         this.loading = false
+        vibrator.startVibration({ duration: 300, type: 'time' }, { id: 0, usage: 'touch' })
       }
     })
   }
