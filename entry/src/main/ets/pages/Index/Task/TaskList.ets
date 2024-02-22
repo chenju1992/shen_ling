@@ -18,6 +18,8 @@ struct TaskList {
   taskListData: TaskInfoItem[] = []
   @State
   allPage: number = 1 // 总页数先设置为1页 后续会更新
+  @State
+  reset: boolean = false // 用于控制重置状态
 
   layer: CustomDialogController = new CustomDialogController({
     builder: HmLoading(),
@@ -97,12 +99,19 @@ struct TaskList {
               }
             })
           })
-        Button("筛选")
+        Button(this.reset ? "重置" : "筛选")
           .backgroundColor(this.getSearchEnable() ? $r('app.color.primary') : $r('app.color.primary_disabled'))
           .height(32)
           .width(60)
           .enabled(this.getSearchEnable())
           .onClick(async() => {
+            if(this.reset) {
+              this.queryParams.startTime = ''
+              this.queryParams.endTime = ''
+              this.reset = false
+            }else {
+              this.reset = true
+            }
             this.layer.open()
             this.allPage = 1
             this.queryParams.page = 1
