@@ -11,6 +11,7 @@ export * from './car_record'
 export * from './delay'
 export * from './location'
 export * from './message'
+export * from './car'
 
 export class ResponseData<T> {
   code: number = 0

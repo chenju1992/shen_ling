@@ -1,5 +1,5 @@
 import { Request } from '../utils'
-import { LoginFormModel } from '../models'
+import { LoginFormModel, UserCarDataTypeModel } from '../models'
 import {  UserInfoModel } from '../models'
 import {  UserTaskInfoModel, UserTaskInfoParamsModel } from '../models'
 
@@ -18,4 +18,9 @@ export const getUserInfo = () => {
 // 获取用户任务数据
 export const getUserTaskInfo = (data: UserTaskInfoParamsModel) => {
   return Request.get<UserTaskInfoModel>("/users/taskReport", data)
+}
+
+// 获取用户车辆信息
+export const getUserCarInfo = () => {
+  return Request.get<UserCarDataTypeModel>("/users/truck")
 }

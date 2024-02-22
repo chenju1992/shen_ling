@@ -94,7 +94,11 @@ struct My {
 
       // 信息列表
       HmCard() {
-        HmCardItem({ leftTitle: '车辆信息', rightText: '' })
+        HmCardItem({ leftTitle: '车辆信息', rightText: '', onRightClick: () => {
+          router.pushUrl({
+            url: 'pages/Car/Car'
+          })
+        } })
         HmCardItem({ leftTitle: '任务设置', rightText: '' })
         HmCardItem({ leftTitle: '系统设置', rightText: '', showBottomBorder: false })
       }
