@@ -80,6 +80,7 @@ struct TaskDetail {
       duration: 3000
     })
     this.getTaskDetail(this.taskDetailData.id) // 重新加载数据
+    this.scroller.scrollEdge(Edge.Top)
   }
 
   // 获取交货状态
@@ -139,13 +140,15 @@ struct TaskDetail {
         right: 20
       })
 
-      Column() {
-        Image($r("app.media.ic_navigation")).width(22).height(22)
-        Text("开始导航").fontSize(14).margin({ top: 10, bottom: 10 })
-      }.justifyContent(FlexAlign.SpaceBetween)
-      .margin({
-        top: 20
-      })
+      if (this.taskDetailData.status === TaskTypeEnum.Line) {
+        Column() {
+          Image($r("app.media.ic_navigation")).width(22).height(22)
+          Text("开始导航").fontSize(14).margin({ top: 10, bottom: 10 })
+        }.justifyContent(FlexAlign.SpaceBetween)
+        .margin({
+          top: 20
+        })
+      }
 
     }.justifyContent(FlexAlign.SpaceBetween).alignItems(VerticalAlign.Center).width('100%')
 
