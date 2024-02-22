@@ -5,9 +5,18 @@
     "pages/Login/Login",
     "pages/Setting/Setting",
     "pages/TaskDetail/TaskDetail",
+    "pages/CarRecord/CarRecord",
+    "pages/Delay/Delay",
+    "pages/ExceptionReport/ExceptionReport",
+    "pages/SelectLocation/SelectLocation",
+    "pages/ExceptionReport/ExceptionDetail",
+    "pages/Navigation/NavigationPage",
     "pages/Index/Message/MessageDetail",
+    "pages/Setting/BindMobile",
     "pages/Setting/MessageSend",
     "pages/Setting/ChangePassword",
-    "pages/Index"
+    "pages/Car/Car",
+    "pages/UserTask/UserTask",
+    "pages/Listen/Listen"
   ]
 }
