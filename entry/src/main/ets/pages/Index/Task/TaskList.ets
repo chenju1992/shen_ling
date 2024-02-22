@@ -60,7 +60,29 @@ struct TaskList {
   getSearchForm() {
     Column() {
       Row() {
-        Search({ placeholder: '请输入任务编号' }).backgroundColor($r('app.color.background_page')).height(32)
+        Search({ placeholder: '请输入任务编号',value: this.queryParams.transportTaskId || '' }).backgroundColor($r('app.color.background_page')).height(32)
+          .onChange(value => {
+            this.queryParams.transportTaskId = value
+          })
+          .onSubmit(async (value) => {
+            this.layer.open()
+            this.queryParams.page = 1 // 不论什么条件变化 都会从第一页开始查
+            if(value) {
+              // value有值的情况下
+              // 处理非数字类型无响应的情况
+              this.queryParams.startTime = ''
+              this.queryParams.endTime = ''
+              this.queryParams.transportTaskId = isNaN(parseInt(value)) ? "0": value
+              this.reset = false
+              this.allPage = 0 // 相当于锁死条件 不可能出现第二条
+            }else {
+              this.allPage = 1 // 没值意味着查不到 重新回到列表型状态
+              this.queryParams.transportTaskId = "" // id设置为空
+            }
+            const result = await getTaskList(this.queryParams)
+            this.taskListData = result.items || []
+            this.layer.close()
+          })
       }
       .justifyContent(FlexAlign.Center)
       .padding({ left: 15, right: 15, bottom: 5 })
@@ -78,7 +100,8 @@ struct TaskList {
             DatePickerDialog.show({
               selected: new Date(),
               onAccept: (value: DatePickerResult) => {
-                this.queryParams.startTime = `${value.year}-${this.addZero(value.month! + 1)}-${this.addZero(value.day)}`
+                this.queryParams.startTime =
+                `${value.year}-${this.addZero(value.month! + 1)}-${this.addZero(value.day)}`
               }
             })
           })
@@ -95,19 +118,21 @@ struct TaskList {
             DatePickerDialog.show({
               selected: new Date(),
               onAccept: (value: DatePickerResult) => {
-                this.queryParams.endTime = `${value.year}-${this.addZero(value.month! + 1)}-${this.addZero(value.day)}`
+                this.queryParams.endTime =
+                `${value.year}-${this.addZero(value.month! + 1)}-${this.addZero(value.day)}`
               }
             })
           })
         Button(this.reset ? "重置" : "筛选")
-          .backgroundColor(this.getSearchEnable() ? $r('app.color.primary') : $r('app.color.primary_disabled'))
+          .backgroundColor(this.getSearchEnable() ? $r('app.color.primary'):  $r('app.color.primary_disabled'))
           .height(32)
           .width(60)
           .enabled(this.getSearchEnable())
-          .onClick(async() => {
+          .onClick(async () => {
+            this.queryParams.transportTaskId = ''
             if(this.reset) {
-              this.queryParams.startTime = ''
-              this.queryParams.endTime = ''
+              this.queryParams.startTime = ""
+              this.queryParams.endTime = ""
               this.reset = false
             }else {
               this.reset = true
